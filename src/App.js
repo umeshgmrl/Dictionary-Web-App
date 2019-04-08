@@ -1,53 +1,69 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
 
 class App extends Component {
   state = {
     words: null,
-  }
+    word: null
+  };
   fetchWords = e => {
-    fetch(`https://www.vocabulary.com/dictionary/autocomplete?search=${e.target.value}`)
-      .then(res => res.text())
-      .then(data => {
-        let div = document.createElement('div');
-        div.innerHTML = data;
-        const words = div.innerText.split('\n').filter(Boolean).map(wordData => {
-          let wordArray = wordData.split(' ');
-          return {
-            name: wordArray.shift(),
-            description: wordArray.join(' ')
-          }
-        });
-        this.setState({
-          words
-        }, () => {
-          div = null;
-        })
-      })
-  }
+    if (!e.target.value) return;
+    fetch(`http://35.200.150.228:7778/words/${e.target.value}`)
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          this.setState({
+            words: res.data.slice(0, 7)
+          });
+        }
+      });
+  };
 
   fetchWord = word => {
-    fetch(`https://www.vocabulary.com/dictionary/definition.ajax?search=${word}&lang=en`)
-      .then(res => res.text())
-      .then(data => {
-        let div = document.createElement('div');
-        console.log(data);
-      }) 
-  }
-  render() {
-    const { words } = this.state;
-    return (
-      <div className="App">
-        <h1>Dictionary</h1>
-        <input type="text" onChange={this.fetchWords} />
-        {
-          words && <ul>
-            {
-              words.map((word, id)=> <li key={id} onClick={() => {this.fetchWord(word.name)}}><strong>{word.name}: </strong>{word.description}</li>)
-            }
-          </ul>
+    fetch(`http://35.200.150.228:7778/word/${word}`)
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          this.setState({
+            word: {
+              name: word,
+              explanation: res.data
+            },
+            words: null
+          });
         }
+      });
+  };
+  render() {
+    const { words, word } = this.state;
+    return (
+      <div className="container">
+        <header>
+          <h2>Dictionary</h2>
+          <form>
+            <input type="text" onChange={this.fetchWords} />
+          </form>
+        </header>
+        {words && (
+          <ul>
+            {words.map((word, id) => (
+              <li
+                key={id}
+                onClick={() => {
+                  this.fetchWord(word.name);
+                }}
+              >
+                <strong>{word.name}: </strong>
+                {word.description}
+              </li>
+            ))}
+          </ul>
+        )}
+        {word && (
+          <div className="word-wrapper">
+            <h1>{word.name}</h1>
+            <p className="explanation">{word.explanation}</p>
+          </div>
+        )}
       </div>
     );
   }
