@@ -2,6 +2,6 @@
 
 A simple dictioanry webapp
 
-[Live at](http://dictionary.surge.sh)
+Live at [http://dictionary.surge.sh](http://dictionary.surge.sh)
 
-[It uses Unofficial Vocabulary.com API as backend.](https://github.com/umeshgmrl/Unofficial-Vocabulary.com-API)
+It uses [Unofficial Vocabulary.com API](https://github.com/umeshgmrl/Unofficial-Vocabulary.com-API) as backend.
