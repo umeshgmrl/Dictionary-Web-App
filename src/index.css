@@ -62,3 +62,7 @@ input:focus {
 .explanation {
 	font-size: 20px;
 }
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: 777;
+}

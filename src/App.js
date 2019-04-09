@@ -40,7 +40,7 @@ class App extends Component {
         <header>
           <h2>Dictionary</h2>
           <form>
-            <input type="text" onChange={this.fetchWords} />
+            <input type="text" onChange={this.fetchWords} placeholder="search..." />
           </form>
         </header>
         {words && (
