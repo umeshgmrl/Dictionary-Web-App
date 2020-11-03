@@ -10,23 +10,27 @@ class App extends Component {
   };
 
   componentDidMount() {
-    window.onkeyup = e => {
-      if (e.key === "ArrowDown" && this.state.keyDownCount < this.state.words.length -1) {
+    window.onkeyup = (e) => {
+      if (
+        e.key === "ArrowDown" &&
+        this.state.keyDownCount < this.state.words.length - 1
+      ) {
         this.setState({
-          keyDownCount: this.state.keyDownCount + 1
-        })
+          keyDownCount: this.state.keyDownCount + 1,
+        });
       }
       if (e.key === "ArrowUp" && this.state.keyDownCount > 0) {
         this.setState({
-          keyDownCount: this.state.keyDownCount - 1
-        })
+          keyDownCount: this.state.keyDownCount - 1,
+        });
       }
-    }
+    };
   }
 
   fetchWords = (e) => {
     if (!e.target.value) return;
-    window.fetch(`${API_URL}/words/${e.target.value}`)
+    window
+      .fetch(`${API_URL}/words/${e.target.value}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
@@ -35,8 +39,8 @@ class App extends Component {
           });
         }
         this.setState({
-          keyDownCount: -1
-        })
+          keyDownCount: -1,
+        });
       });
   };
 
@@ -45,7 +49,8 @@ class App extends Component {
       loading: true,
     });
 
-    window.fetch(`${API_URL}/word/${word}`)
+    window
+      .fetch(`${API_URL}/word/${word}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
@@ -56,7 +61,7 @@ class App extends Component {
             },
             words: [],
             loading: false,
-            keyDownCount: -1
+            keyDownCount: -1,
           });
         }
       });
@@ -89,7 +94,7 @@ class App extends Component {
                 {words.map((word, id) => (
                   <li
                     key={id}
-                    className={id === this.state.keyDownCount ? "bg-gray": ""}
+                    className={id === this.state.keyDownCount ? "bg-gray" : ""}
                     onClick={() => {
                       this.fetchWord(word.name);
                     }}
@@ -101,8 +106,7 @@ class App extends Component {
               </ul>
             }
           </form>
-        </main>
-        {word && (
+          {word && (
           <div className="word-wrapper">
             <h1>{word.name}</h1>
             <p className="explanation">{word.explanation}</p>
@@ -117,6 +121,10 @@ class App extends Component {
             <div></div>
           </div>
         )}
+        </main>
+        <footer>
+          <a href="https://github.com/umeshgmrl/Dictionary-Web-App" target="_blank" rel="noopener noreferrer" className="source-link">Source</a>
+        </footer>
       </div>
     );
   }

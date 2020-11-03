@@ -34,7 +34,7 @@ li {
 	max-width: 600px;
 	text-align: center;
 	margin: 0px auto;
-	margin-top: 80px;
+	margin-top: 150px;
 }
 
 header {
@@ -48,6 +48,7 @@ form {
 	position: absolute;
 	width: 100%;
 	text-align: center;
+	top: 100px;
 }
 
 input {
@@ -101,6 +102,14 @@ input:focus {
 .lds-ring div:nth-child(3) {
   animation-delay: -0.15s;
 }
+
+.source-link {
+	position: fixed;
+	bottom: 10px;
+	right: 20px;
+	color: #4a4a4a;
+  }
+
 @keyframes lds-ring {
   0% {
     transform: rotate(0deg);
