@@ -26,8 +26,8 @@ li {
 	cursor: pointer;
 }
 
-li:hover {
-	background-color: #eee;
+.bg-gray, li:hover {
+	background-color: #ddd;
 }
 
 .word-wrapper {

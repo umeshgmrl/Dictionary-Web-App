@@ -1,57 +1,73 @@
 import React, { Component } from "react";
-const API_URL = "https://vocabulary.now.sh"
+const API_URL = "https://vocabulary.now.sh";
 
 class App extends Component {
   state = {
-    words: null,
+    words: [],
     word: null,
     loading: false,
-    search: "",
+    keyDownCount: -1,
   };
-  fetchWords = e => {
+
+  componentDidMount() {
+    window.onkeyup = e => {
+      if (e.key === "ArrowDown" && this.state.keyDownCount < this.state.words.length -1) {
+        this.setState({
+          keyDownCount: this.state.keyDownCount + 1
+        })
+      }
+      if (e.key === "ArrowUp" && this.state.keyDownCount > 0) {
+        this.setState({
+          keyDownCount: this.state.keyDownCount - 1
+        })
+      }
+    }
+  }
+
+  fetchWords = (e) => {
     if (!e.target.value) return;
-    fetch(`${API_URL}/words/${e.target.value}`)
-      .then(res => res.json())
-      .then(res => {
+    window.fetch(`${API_URL}/words/${e.target.value}`)
+      .then((res) => res.json())
+      .then((res) => {
         if (res.success) {
           this.setState({
-            words: res.data
+            words: res.data,
           });
         }
+        this.setState({
+          keyDownCount: -1
+        })
       });
   };
 
-  fetchWord = word => {
+  fetchWord = (word) => {
     this.setState({
-      loading: true
+      loading: true,
     });
 
-    fetch(`${API_URL}/word/${word}`)
-      .then(res => res.json())
-      .then(res => {
+    window.fetch(`${API_URL}/word/${word}`)
+      .then((res) => res.json())
+      .then((res) => {
         if (res.success) {
           this.setState({
             word: {
               name: word,
               explanation: res.data,
             },
-            words: null,
-            loading: false
+            words: [],
+            loading: false,
+            keyDownCount: -1
           });
         }
       });
   };
 
-  handleInputChange = (e) => {
-    if (!e.target.value) return;
-    this.setState({
-      search: e.target.value,
-    })
-  }
-
   handleSubmit = (e) => {
     e.preventDefault();
-  }
+    if (this.state.keyDownCount > -1) {
+      this.fetchWord(this.state.words[this.state.keyDownCount].name);
+    }
+  };
 
   render() {
     const { words, word, loading } = this.state;
@@ -61,23 +77,29 @@ class App extends Component {
           <h2>Dictionary</h2>
         </header>
         <main>
-        <form onSubmit={this.handleSubmit}>
-            <input type="text" onChange={this.fetchWords} placeholder="search..." autoFocus />
-            {words && (
-          <ul>
-            {words.map((word, id) => (
-              <li
-                key={id}
-                onClick={() => {
-                  this.fetchWord(word.name);
-                }}
-              >
-                <strong>{word.name}: </strong>
-                {word.description}
-              </li>
-            ))}
-          </ul>
-        )}
+          <form onSubmit={this.handleSubmit}>
+            <input
+              type="text"
+              onChange={this.fetchWords}
+              placeholder="search..."
+              autoFocus
+            />
+            {
+              <ul>
+                {words.map((word, id) => (
+                  <li
+                    key={id}
+                    className={id === this.state.keyDownCount ? "bg-gray": ""}
+                    onClick={() => {
+                      this.fetchWord(word.name);
+                    }}
+                  >
+                    <strong>{word.name}: </strong>
+                    {word.description}
+                  </li>
+                ))}
+              </ul>
+            }
           </form>
         </main>
         {word && (
@@ -86,11 +108,15 @@ class App extends Component {
             <p className="explanation">{word.explanation}</p>
           </div>
         )}
-        
-        {
-          loading && <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
-        }
-        
+
+        {loading && (
+          <div className="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        )}
       </div>
     );
   }
