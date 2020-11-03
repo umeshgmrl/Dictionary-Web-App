@@ -7,6 +7,9 @@ class App extends Component {
     word: null,
     loading: false,
     keyDownCount: -1,
+    timeout: null,
+    input: "",
+    inputLoading: false,
   };
 
   componentDidMount() {
@@ -28,20 +31,39 @@ class App extends Component {
   }
 
   fetchWords = (e) => {
-    if (!e.target.value) return;
-    window
-      .fetch(`${API_URL}/words/${e.target.value}`)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.success) {
-          this.setState({
-            words: res.data,
-          });
-        }
-        this.setState({
-          keyDownCount: -1,
-        });
+    if (e.target.value === "") {
+      this.setState({
+        input: "",
+        inputLoading: false,
       });
+      return;
+    }
+    if (!e.target.value) return;
+    this.setState({
+      input: e.target.value,
+      inputLoading: true,
+    })
+    if (this.state.timeout) {
+      clearTimeout(this.state.timeout)
+    };
+    this.setState({
+      timeout: setTimeout(() => {
+        window
+        .fetch(`${API_URL}/words/${this.state.input}`)
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.success) {
+            this.setState({
+              words: res.data,
+              inputLoading: false,
+            });
+          }
+          this.setState({
+            keyDownCount: -1,
+          });
+        });
+      }, 350)
+    })
   };
 
   fetchWord = (word) => {
@@ -75,9 +97,9 @@ class App extends Component {
   };
 
   render() {
-    const { words, word, loading } = this.state;
+    const { words, word, loading, inputLoading } = this.state;
     return (
-      <div className="container">
+      <div className="container column">
         <header>
           <h2>Dictionary</h2>
         </header>
@@ -88,6 +110,8 @@ class App extends Component {
               onChange={this.fetchWords}
               placeholder="search..."
               autoFocus
+              value={this.state.input}
+              className={inputLoading ? "input-loader" : ""}
             />
             {
               <ul>

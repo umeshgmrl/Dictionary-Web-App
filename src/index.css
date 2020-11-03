@@ -8,7 +8,7 @@ h2 {
 }
 ul {
 	text-align: left;
-	margin: 5px auto auto auto;
+	margin: 15px auto auto auto;
 	z-index: 10;
 	width: 100%;
 	border-radius: 10px;
@@ -107,9 +107,11 @@ input:focus {
 
 .source-link {
 	position: fixed;
-	bottom: 10px;
-	right: 20px;
+	bottom: 5px;
+	right: 15px;
 	color: #4a4a4a;
+	padding: 5px;
+	background-color: #fff;
   }
 
 @keyframes lds-ring {
@@ -121,4 +123,35 @@ input:focus {
   }
 }
 
+@media only screen and (max-width: 500px) {
+	.word-wrapper {
+		margin-top: 0px;
+		overflow-x: hidden;
+	}
+	input {
+		max-width: 90%;
+	}
+	.container {
+		padding: 0px 1.5rem;
+	}
+	h1 {
+		font-size: 50px;
+		font-weight: 300;
+		margin-bottom: 10px;
+	}
+	.lds-ring, form {
+		position: unset;
+	}
+	.lds-ring {
+		position: fixed;
+		top: 200px;
+		left: 0px;
+	}
+  }
 
+.input-loader {
+	background: url(loader.svg) no-repeat right;
+}
+
+
+  
