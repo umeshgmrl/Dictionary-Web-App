@@ -4,17 +4,19 @@ h1 {
 }
 h2 {
 	font-size: 30px;
+	margin-left: 10px;
 }
 ul {
 	text-align: left;
-	margin: 0px auto;
+	margin: 5px auto auto auto;
 	z-index: 10;
-	position: absolute;
 	width: 100%;
 	border-radius: 10px;
+	max-width: 400px;
+	max-height: 350px;
+	overflow-y: scroll;
 }
 li {
-	max-width: 400px;
 	margin: 0px auto;
 	overflow: hidden;
 	white-space: pre;
