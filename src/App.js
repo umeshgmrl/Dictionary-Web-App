@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-const API_URL = "https://vocabulary.now.sh";
+const API_URL = "https://vocabulary.vercel.app";
 
 class App extends Component {
   state = {
